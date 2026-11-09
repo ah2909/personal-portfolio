@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Search } from "lucide-react";
 import type { ProjectRecord } from "../lib/project-model";
 import { ProductVisual } from "./product-visual";
@@ -75,7 +74,7 @@ export function ProjectGallery({ projects }: { projects: ProjectRecord[] }) {
       <div className="project-grid">
         {filtered.map((project) => (
           <article className="project-card" key={project.slug}>
-            <Link
+            <a
               className="project-card-visual"
               href={`/projects/${project.slug}`}
               aria-label={`Explore ${project.title}`}
@@ -87,16 +86,16 @@ export function ProjectGallery({ projects }: { projects: ProjectRecord[] }) {
               {project.featured && (
                 <span className="featured-label">SELECTED PROJECT</span>
               )}
-            </Link>
+            </a>
             <div className="project-card-info">
               <div>
                 <span className="eyebrow">{project.category}</span>
-                <Link href={`/projects/${project.slug}`}>
+                <a href={`/projects/${project.slug}`}>
                   <h3>
                     {project.title}
                     <ArrowUpRight size={23} aria-hidden />
                   </h3>
-                </Link>
+                </a>
                 <p>{project.tagline}</p>
               </div>
               <span className="project-year">{project.year}</span>
@@ -109,9 +108,9 @@ export function ProjectGallery({ projects }: { projects: ProjectRecord[] }) {
                 <span>+{project.stack.length - 4}</span>
               )}
             </div>
-            <Link className="text-link" href={`/projects/${project.slug}`}>
+            <a className="text-link" href={`/projects/${project.slug}`}>
               Explore the project <ArrowRight size={16} aria-hidden />
-            </Link>
+            </a>
           </article>
         ))}
       </div>

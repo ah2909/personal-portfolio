@@ -57,7 +57,13 @@ The integration script only accepts a loopback origin. It exercises authenticati
 
 The application uses React and TypeScript on the Vinext / Vite Sites starter, D1 with Drizzle for durable project records, Zod for content validation, and self-hosted Manrope / Space Grotesk fonts. Three.js is loaded separately from the main page; offscreen and hidden scenes skip GPU rendering, and reduced motion or the pause control stops animation. A CSS composition remains visible when WebGL is unavailable.
 
-Project previews are original illustrative compositions with sample data, not production screenshots. Real demo and repository URLs are empty until supplied by the owner. New projects can use an HTTPS cover image or the built-in project identity preview.
+Cryptofolio project pages include real desktop and mobile screenshots from the running local test account, a feature explorer with an accessible enlarge dialog, a market overview, and a mobile/PWA section. E-Commerce includes an owner operations section, a shopper feature explorer, and differentiated checkout/discovery behavior, illustrated with five genuine retained local screenshots. The appearance editor capture uses synthetic test-store content. New projects use an HTTPS cover image or the built-in project identity preview.
+
+E-Commerce exports live in `public/projects/e-commerce/` at a consistent 1920 × 1400. `node scripts/prepare-commerce-captures.mjs` regenerates the highlight crops from retained captures in the sibling source projects, without changing those projects. See `PROJECT_RESEARCH.md` for exact provenance and the current fresh-capture limitation. Credentials are not part of the portfolio.
+
+Screenshot sources live in `public/projects/cryptofolio/`. Keep desktop capture viewports at 1920 × 1080 and mobile viewports at 440 × 956. Run `node scripts/prepare-project-captures.mjs` after capturing: it rejects mismatched aspect ratios and creates WebP assets at exactly 1920 × 1080 for desktop and 880 × 1912 for mobile. The page reserves the matching dimensions while loading and switching screenshots.
+
+The current screenshot and case-study update is local-only; publishing is not part of this pass.
 
 ## Hosting
 

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react";
 import { Header, Footer } from "../components/site-shell";
 import { Sculpture } from "../components/sculpture";
+import { PortfolioMotion } from "../components/portfolio-motion";
 import { ProjectGallery } from "../components/project-gallery";
 import { listProjects } from "../lib/projects";
 
@@ -18,6 +18,7 @@ export default async function Home() {
   const projects = await listProjects();
   return (
     <div id="top">
+      <PortfolioMotion />
       <Header projectCount={projects.length} />
       <main id="main">
         <section className="hero wrap">
@@ -119,13 +120,13 @@ export default async function Home() {
               </span>
             </div>
             {projects[0] && (
-              <Link
+              <a
                 className="text-link"
                 href={`/projects/${projects[0].slug}`}
               >
                 Start with {projects[0].title}{" "}
                 <ArrowUpRight size={16} aria-hidden />
-              </Link>
+              </a>
             )}
           </div>
         </section>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUpRight, Asterisk, ArrowUp } from "lucide-react";
 import { profile } from "../lib/profile";
 
@@ -11,31 +10,31 @@ export function Header({
 }) {
   return (
     <header className="site-header wrap">
-      <Link href="/" className="wordmark" aria-label={`${profile.name} home`}>
+      <a href="/" className="wordmark" aria-label={`${profile.name} home`}>
         h<span className="brand-dot">.</span>
         <span className="wordmark-label">
           {profile.name.toUpperCase()}
           <br />
           PERSONAL PROJECT LAB
         </span>
-      </Link>
+      </a>
       <nav aria-label="Main navigation">
-        <Link href="/#work">
+        <a href="/#work">
           Selected work{" "}
           {projectCount !== undefined && (
             <span className="nav-index">
               {String(projectCount).padStart(2, "0")}
             </span>
           )}
-        </Link>
-        <Link href="/#about">About</Link>
-        <Link
+        </a>
+        <a href="/#about">About</a>
+        <a
           className="nav-contact"
           href={admin ? "/" : `mailto:${profile.email}`}
         >
           {admin ? "View portfolio" : "Let’s connect"}
           <ArrowUpRight size={16} aria-hidden />
-        </Link>
+        </a>
       </nav>
     </header>
   );
@@ -73,9 +72,9 @@ export function Footer() {
           © {new Date().getFullYear()} {profile.name} · Built with curiosity.
         </span>
         <div>
-          <Link href="/admin">
+          <a href="/admin">
             Project admin <ArrowUpRight size={14} aria-hidden />
-          </Link>
+          </a>
           <a href="#top">
             Back to top <ArrowUp size={14} aria-hidden />
           </a>

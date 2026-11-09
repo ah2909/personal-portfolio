@@ -321,6 +321,18 @@ img {
   position: relative;
   isolation: isolate;
 }
+.scene-grid {
+  position: absolute;
+  inset: 8% -3% 4%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at center, #ed582c12, transparent 66%),
+    repeating-linear-gradient(0deg, transparent 0 39px, #b7b6a82b 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, #b7b6a82b 39px 40px);
+  mask-image: radial-gradient(ellipse, black 15%, transparent 70%);
+  transform: perspective(600px) rotateX(18deg) rotateZ(-12deg);
+  pointer-events: none;
+}
 .sculpture-shell:after {
   content: "";
   position: absolute;
@@ -338,6 +350,11 @@ img {
   width: 100%;
   position: relative;
   z-index: 2;
+  cursor: grab;
+  touch-action: pan-y;
+}
+.sculpture.is-dragging {
+  cursor: grabbing;
 }
 .sculpture canvas {
   width: 100%;
@@ -416,6 +433,18 @@ img {
 }
 .scene-controls button:hover {
   background: white;
+}
+.scene-controls .scene-expand {
+  width: auto;
+  border-radius: 24px;
+  padding: 0 14px;
+  gap: 8px;
+  font-size: 11px;
+}
+.scene-controls .scene-expand[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
 }
 .hero-art-caption {
   position: absolute;
@@ -3890,4 +3919,53 @@ body {
   .publish-panel .form-field select {
     font-size: 16px;
   }
+}
+
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.reveal-visible {
+  animation: portfolio-reveal 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-copy > :nth-child(2) { animation-delay: 70ms; }
+.hero-copy > :nth-child(3) { animation-delay: 140ms; }
+.hero-copy > :nth-child(4) { animation-delay: 210ms; }
+.hero-copy > :nth-child(5) { animation-delay: 280ms; }
+.hero-art.reveal-visible { animation-duration: 1200ms; }
+@keyframes portfolio-reveal {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .button, .project-open {
+    transition: transform 250ms, background 200ms, color 200ms, box-shadow 250ms;
+  }
+  .button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px #25272516;
+  }
+  .button:hover svg, .text-link:hover svg {
+    transform: translate(3px, -2px);
+  }
+  .button svg, .text-link svg {
+    transition: transform 250ms;
+  }
+  .project-card-visual:hover .project-open {
+    transform: rotate(45deg);
+  }
+  .footer-star {
+    animation: curiosity-turn 32s linear infinite;
+  }
+  @keyframes curiosity-turn {
+    to { transform: rotate(360deg); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pending { opacity: 1; transform: none; }
+}
+@media (max-width: 540px) {
+  .scene-controls { gap: 5px; }
+  .scene-controls > span { font-size: 7px; margin-right: 2px; }
+  .scene-controls .scene-expand { padding-inline: 10px; }
 }

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/manrope";
 import "./globals.css";
+import "./project-case-study.css";
+import "./commerce-case-study.css";
 import { profile } from "../lib/profile";
 
 export const metadata: Metadata = {

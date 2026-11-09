@@ -52,7 +52,7 @@ export const seedProjects: Project[] = [
       "Exchange synchronization and CSV transaction import",
     ],
     caveat:
-      "Reviewed in local frontend and backend source. This presentation does not connect to exchanges, run financial analysis, or expose account data. Visuals use illustrative sample data.",
+      "Reviewed in local frontend and backend source. Desktop and mobile screenshots were captured from the running local application using its test account. Values reflect the capture time, not a live feed. This portfolio does not connect to exchanges or run financial analysis.",
     accent: "mint",
     year: "2026",
     order: 1,
@@ -66,13 +66,13 @@ export const seedProjects: Project[] = [
     slug: "e-commerce",
     title: "E-Commerce",
     category: "COMMERCE / FULL STACK",
-    tagline: "One platform. A store of your own.",
+    tagline: "Built for the shop. Designed for the shopper.",
     description:
-      "A multi-store commerce platform for Vietnamese shops, connecting customizable storefronts with catalog, checkout, inventory, payments, and store operations.",
+      "An independent storefront and an everyday workspace for Vietnamese retailers. Owners shape their brand and manage products, stock, orders, and payments; shoppers discover the right variant and follow their purchase through delivery.",
     problem:
-      "A storefront is only the visible part of commerce. Orders must keep their original prices, inventory must survive competing checkouts, and every store's customers and data must remain separate.",
+      "An owner needs to keep the catalog, stock, payments, and delivery work connected. A shopper needs to find a product in the right size and budget, understand availability, and know what happens after ordering.",
     approach:
-      "Pair a customizable Next.js shopping experience with a Go modular monolith. Let the backend own tenant resolution, money, stock reservations, and order transitions, while the storefront stays focused on the shopper.",
+      "Connect a branded storefront to permissioned store operations. Pair precise product discovery and clear order progress with server-owned prices, stock reservations, historical order snapshots, and independent store data.",
     architecture:
       "The Next.js and TypeScript UI uses TanStack Query, shared shadcn / Radix components, and an OpenAPI contract. A Go API uses Gin and GORM with module-owned domain logic. PostgreSQL owns transactions, Redis provides ephemeral coordination, and an outbox carries asynchronous events toward Kafka without putting it inside the checkout commit.",
     stack: [
@@ -88,21 +88,21 @@ export const seedProjects: Project[] = [
     ],
     features: [
       {
-        title: "A storefront with identity",
+        title: "Find the right product",
         description:
-          "Browse products, variants, categories, and available stock. Merchants can edit their brand, hero, and announcement, and choose home, fashion, or sport appearance presets.",
+          "Search across names, descriptions, SKUs, brands, and categories without needing exact accents. Combine collection, brand, size, budget, and stock filters; keep your choices in the URL when returning to browse.",
         visual: "storefront",
       },
       {
-        title: "Checkout, carefully handled",
+        title: "Choose with more confidence",
         description:
-          "Guest and registered shoppers can build a cart and enter Vietnamese delivery addresses. Checkout revalidates prices and stock, reserves inventory, and persists order snapshots with idempotent retry protection.",
+          "Inspect product photos with a gallery, select an explicit size or variant, see its price and availability, and adjust quantity. Purchase controls reflect the chosen variant; original size labels remain visible.",
         visual: "checkout",
       },
       {
-        title: "The whole store, managed",
+        title: "Follow every step",
         description:
-          "Permissioned administration covers products, price lists, inventory adjustments, orders, shipping, workforce roles, and payment reconciliation. VietQR supports audited manual confirmation.",
+          "A five-step order timeline connects payment, preparation, dispatch, and completion. Shoppers see the original order totals and authorized shipment information, with clear messages for expiry, cancellation, reconciliation, and refunds.",
         visual: "operations",
       },
     ],
@@ -113,7 +113,7 @@ export const seedProjects: Project[] = [
       "Versioned appearance and role-based administration",
     ],
     caveat:
-      "Source review confirms implemented flows. The backend inventory marks live MoMo and social-login interoperability as validation pending. This is not a production-readiness claim. Visuals use illustrative sample data.",
+      "Capabilities were reviewed in project documentation and implementation. Screenshots are retained local app captures from earlier project UI checks; the appearance editor uses synthetic test-store content. Values are test data, not live store activity. Live MoMo and social-login validation remain pending; checkout currently offers VietQR. No production-readiness claim is made.",
     accent: "orange",
     year: "2026",
     order: 2,

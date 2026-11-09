@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Header } from "../components/site-shell";
 
 export default function NotFound() {
@@ -13,9 +12,9 @@ export default function NotFound() {
           here. Yet.
         </h1>
         <p>This project may be a draft, removed, or at another address.</p>
-        <Link className="button button-dark" href="/#work">
+        <a className="button button-dark" href="/#work">
           Back to the projects
-        </Link>
+        </a>
       </main>
     </>
   );
