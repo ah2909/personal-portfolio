@@ -1,19 +1,27 @@
+"use client";
+
+import { useTranslation } from "../components/language-provider";
 import { Header } from "../components/site-shell";
 
 export default function NotFound() {
+  const t = useTranslation();
   return (
     <>
       <Header />
       <main id="main" className="wrap error-page">
-        <span className="eyebrow">404 / A SMALL DETOUR</span>
+        <span className="eyebrow">
+          {t("404 / A SMALL DETOUR")}
+        </span>
         <h1>
-          Nothing built
+          {t("Nothing built")}
           <br />
-          here. Yet.
+          {t("here. Yet.")}
         </h1>
-        <p>This project may be a draft, removed, or at another address.</p>
+        <p>
+          {t("This project may be a draft, removed, or at another address.")}
+        </p>
         <a className="button button-dark" href="/#work">
-          Back to the projects
+          {t("Back to the projects")}
         </a>
       </main>
     </>

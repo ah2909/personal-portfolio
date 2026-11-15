@@ -1,20 +1,24 @@
 "use client";
 
-export default function ErrorPage({ reset }: { reset: () => void }) {
+import { useTranslation } from "../components/language-provider";
+
+export default function ErrorPage({ reset }: { reset: () => void; }) {
+  const t = useTranslation();
   return (
     <main id="main" className="wrap error-page">
-      <span className="eyebrow">A SMALL INTERRUPTION</span>
+      <span className="eyebrow">
+        {t("A SMALL INTERRUPTION")}
+      </span>
       <h1>
-        Let’s try
+        {t("Let’s try")}
         <br />
-        that again.
+        {t("that again.")}
       </h1>
       <p>
-        The project collection could not be loaded. Your saved work is
-        unchanged.
+        {t("The project collection could not be loaded. Your saved work is unchanged.")}
       </p>
       <button type="button" className="button button-dark" onClick={reset}>
-        Try again
+        {t("Try again")}
       </button>
     </main>
   );

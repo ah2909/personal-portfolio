@@ -1,70 +1,76 @@
 # Cao Anh Huân — Personal Project Lab
 
-A responsive editorial portfolio with a lazy-loaded Three.js sculpture, searchable project collection, feature explorers, and database-backed administration.
-
-## Pages
-
-- `/`: introduction, interactive sculpture, project collection, and about section.
-- `/projects/cryptofolio`: source-grounded Cryptofolio introduction.
-- `/projects/e-commerce`: source-grounded E-Commerce introduction.
-- `/projects/:slug`: introduction pages generated from published project content.
-- `/admin`: authenticated collection, project editor, and private draft preview.
+A bilingual React and TypeScript portfolio using Vinext, Vite, Cloudflare Workers, and D1. Includes project case studies, a Three.js sculpture, and an owner-only project editor.
 
 ## Local development
 
-Requires Node.js 22.13 or newer.
+Requires Node.js 22.13 or newer. Run commands from this directory.
 
 ```powershell
-npm install
-npm run build
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_worried_spectrum.sql
+npm ci
+npm run db:migrate:local
 npm run dev
 ```
 
-Apply the migration only once to a new local database. The preview URL is printed by the dev server. Local and hosted databases are separate.
-
-The portable starter provides development-only sign-in at `/signin-with-chatgpt?return_to=/admin`. It creates a synthetic local identity and is excluded from production builds. Hosted authentication is handled by Sites.
-
-## Add or update a project
-
-Open `/admin` and choose **Add project**. Enter an introduction, challenge, approach, architecture, technology stack, and at least one feature. Select a palette and display order. Optional HTTPS links can point to a live demo, source repository, and public cover image.
-
-Use **Preview** to inspect a draft. **Save draft** stores it without exposing an introduction route. Enable **Publish project** and choose **Save & publish** to make it appear immediately. Uncheck that option and save to hide a project again. Existing slugs are locked to preserve links. Edits use revision checks to prevent an older tab from silently overwriting a newer save.
-
-The two reviewed projects are code-backed defaults with database overrides. Removing a default stores a tombstone so it stays removed after restart. Deleted slugs remain reserved. The remove action is confirmed in the UI; keeping a project as an unpublished draft is recommended when it may be needed again.
-
-## Access boundary
-
-The initial hosted Site is **owner-private**. That platform boundary restricts both portfolio and admin access to its owner. Independently, the admin page and every admin API operation require the trusted signed-in email to match `caoanhhuan2909@gmail.com`. A different signed-in identity cannot manage content. The application rejects cross-origin mutations, validates bounded content, and only accepts HTTPS external URLs. API responses containing drafts are not cached.
-
-The email allowlist is centralized in `lib/admin-auth.ts` and uses the profile in `lib/profile.ts`. Local mock access is explicitly limited to development builds. Hosted authentication is handled by Sites; do not trust caller-supplied identity headers on a separate hosting platform. Audience changes are separate from content publishing.
-
-Runtime secrets and local state are ignored. No original project environment, deployment, package, or other configuration files were used as project research. See [PROJECT_RESEARCH.md](PROJECT_RESEARCH.md) for source scope and presentation limits.
-
-## Verification
+Open the URL printed by the server (normally http://localhost:5173). Local D1 data is separate from the hosted database. Keep `.wrangler/state` to preserve local records. If you previously applied the initial SQL directly, skip the initial migration on that existing database; it already contains the table.
 
 ```powershell
-npx tsc --noEmit
+npm run typecheck
+npm run lint
+npm run verify:auth
 npm run build
-npm audit --omit=dev --audit-level=high
-node scripts/verify-portfolio.mjs
-node scripts/verify-admin-auth.mjs
+npm start
 ```
 
-The integration script only accepts a loopback origin. It exercises authentication, forged-header rejection, cross-origin rejection, unsafe URLs, duplicate slugs, draft creation, persisted reads, publication, stale writes, unpublication, and removal. It removes its disposable project afterward. Set `PORTFOLIO_TEST_ORIGIN` if the preview uses another loopback URL.
+`npm start` previews the built Worker locally. With a local server running, `npm run verify:portfolio` checks public pages and unauthenticated access, and `npm run verify:i18n` checks English and Vietnamese rendering. Admin mutation checks require a valid `PORTFOLIO_TEST_ACCESS_TOKEN` and matching local Access configuration; they create and remove a disposable project.
 
-## Implementation
+## Cloudflare deployment
 
-The application uses React and TypeScript on the Vinext / Vite Sites starter, D1 with Drizzle for durable project records, Zod for content validation, and self-hosted Manrope / Space Grotesk fonts. Three.js is loaded separately from the main page; offscreen and hidden scenes skip GPU rendering, and reduced motion or the pause control stops animation. A CSS composition remains visible when WebGL is unavailable.
+This app deploys to **Cloudflare Workers**, with D1 for project records. It is not a static Pages export.
 
-Cryptofolio project pages include real desktop and mobile screenshots from the running local test account, a feature explorer with an accessible enlarge dialog, a market overview, and a mobile/PWA section. E-Commerce includes an owner operations section, a shopper feature explorer, and differentiated checkout/discovery behavior, illustrated with five genuine retained local screenshots. The appearance editor capture uses synthetic test-store content. New projects use an HTTPS cover image or the built-in project identity preview.
+1. Sign in with `npx wrangler login`.
+2. Create a database with `npx wrangler d1 create portfolio`.
+3. Copy its real database ID into [wrangler.jsonc](wrangler.jsonc). The checked-in ID is a local-development placeholder.
+4. Apply the schema with `npm run db:migrate:remote`.
+5. Run `npm run deploy` to build and deploy the Worker.
 
-E-Commerce exports live in `public/projects/e-commerce/` at a consistent 1920 × 1400. `node scripts/prepare-commerce-captures.mjs` regenerates the highlight crops from retained captures in the sibling source projects, without changing those projects. See `PROJECT_RESEARCH.md` for exact provenance and the current fresh-capture limitation. Credentials are not part of the portfolio.
+For Cloudflare Git builds, set the project root to this directory (`showcase`), the build command to `npm run build`, and the deploy command to `npx wrangler deploy --config dist/server/wrangler.json`. Apply remote migrations separately when changing the schema. Keep the lockfile and [drizzle migrations](drizzle/).
 
-Screenshot sources live in `public/projects/cryptofolio/`. Keep desktop capture viewports at 1920 × 1080 and mobile viewports at 440 × 956. Run `node scripts/prepare-project-captures.mjs` after capturing: it rejects mismatched aspect ratios and creates WebP assets at exactly 1920 × 1080 for desktop and 880 × 1912 for mobile. The page reserves the matching dimensions while loading and switching screenshots.
+## Admin authentication
 
-The current screenshot and case-study update is local-only; publishing is not part of this pass.
+Create a Cloudflare Access self-hosted application covering both `/admin` (including subpaths) and `/api/admin/*` on the portfolio hostname. Allow only the owner's email from [lib/profile.ts](lib/profile.ts). Public portfolio routes can remain public.
 
-## Hosting
+Set these Worker secrets, using values from the Access application:
 
-`.openai/hosting.json` retains the Site ID and `DB` binding. Use the Sites source and deployment workflow to publish updates; it applies hosted schema migrations. Publishing project content through the admin changes D1 records directly and does not require a source deployment.
+```powershell
+npx wrangler secret put ACCESS_TEAM_DOMAIN
+npx wrangler secret put ACCESS_AUD
+```
+
+`ACCESS_TEAM_DOMAIN` is the hostname only, such as `your-team.cloudflareaccess.com`. `ACCESS_AUD` is the application's audience tag. For local authenticated checks, put the same settings in an ignored `.dev.vars` file and supply an actual Access JWT to the verification script.
+
+The app verifies the Access JWT signature, issuer, audience, expiry, and owner email. It does not trust the email header alone. Admin pages return 404 and admin APIs return 401 without a valid identity. There is no development sign-in bypass. Without Access settings, administration stays disabled. Protecting both paths with Access provides the browser login flow.
+
+## Project content
+
+Open `/admin` after configuring Access to add, edit, preview, publish, or remove projects. Slugs are permanent, drafts stay private, and revision checks prevent stale edits from overwriting newer content. The reviewed projects are code-backed defaults with D1 overrides; removing a default stores a tombstone.
+
+## Languages
+
+The header switches between English and Tiếng Việt. The `portfolio-language` cookie remembers the selection. Pages render the selected language on the server, including metadata. Switching preserves unsaved editor state. Translations live in [lib/vietnamese.ts](lib/vietnamese.ts); unknown text falls back to the original. Search ignores Vietnamese accents.
+
+## What scripts does
+
+The [scripts folder](scripts/) contains optional maintenance and verification tools. None is required by `dev`, `build`, `start`, or `deploy`.
+
+| Script | Purpose |
+| --- | --- |
+| `verify-admin-auth.mjs` | Checks owner authorization and JWT verification, including forgery and expiry rejection. |
+| `verify-portfolio.mjs` | Checks public routes, denied unauthenticated requests, and optionally admin content operations against a local server. |
+| `verify-i18n.mjs` | Checks English/Vietnamese pages, metadata, and language fallback against a local server. |
+| `prepare-project-captures.mjs` | Validates original Cryptofolio PNG dimensions and creates the WebP assets served by the app. |
+| `prepare-commerce-captures.mjs` | Recreates commerce WebP captures from local sibling project screenshots; its source paths are machine-specific. |
+
+You can remove the entire folder if you do not need these tools; also remove the three `verify:*` entries from [package.json](package.json). The screenshot tools use `sharp`, declared as a development dependency.
+
+Original Cryptofolio PNGs live in [captures/cryptofolio](captures/cryptofolio/), outside the public directory. Keep them to regenerate WebP assets, or delete them if you only need the final assets in [public/projects](public/projects/). Desktop exports are 1920 × 1080, mobile exports 880 × 1912, and commerce exports 1920 × 1400.

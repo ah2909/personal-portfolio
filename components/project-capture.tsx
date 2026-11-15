@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "./language-provider";
+
 import { useRef } from "react";
 import { Expand, X, ArrowUpRight } from "lucide-react";
 import type { ProjectCapture as Capture } from "../lib/project-media";
@@ -15,11 +17,12 @@ export function ProjectCapture({
   framed?: boolean;
   className?: string;
 }) {
+  const t = useTranslation();
   const dialog = useRef<HTMLDialogElement>(null);
   const image = (
     <img
       src={capture.src}
-      alt={capture.alt}
+      alt={t(capture.alt)}
       width={capture.width}
       height={capture.height}
       style={{ aspectRatio: `${capture.width} / ${capture.height}` }}
@@ -36,7 +39,7 @@ export function ProjectCapture({
         type="button"
         className={`capture-open ${framed ? "is-framed" : ""}`}
         onClick={() => dialog.current?.showModal()}
-        aria-label={`Enlarge screenshot: ${capture.alt}`}
+        aria-label={`${t("Enlarge screenshot")}: ${t(capture.alt)}`}
       >
         {framed && capture.device === "desktop" && (
           <span className="capture-browser">
@@ -49,7 +52,7 @@ export function ProjectCapture({
               {capture.src.includes("/e-commerce/")
                 ? "E-Commerce"
                 : "Cryptofolio"}{" "}
-              <span className="capture-browser-divider">/</span> Product view
+              <span className="capture-browser-divider">/</span> {t("Product view")}
             </span>
             <ArrowUpRight size={12} aria-hidden />
           </span>
@@ -57,28 +60,32 @@ export function ProjectCapture({
         {image}
         <span className="capture-expand">
           <Expand size={15} aria-hidden />
-          <span>Take a closer look</span>
+          <span>
+            {t("Take a closer look")}
+          </span>
         </span>
       </button>
       <figcaption>
         <span className="capture-live-dot" />
-        {capture.caption}
+        {t(capture.caption)}
       </figcaption>
       <dialog
         ref={dialog}
         className="capture-dialog"
-        aria-label={capture.alt}
+        aria-label={t(capture.alt)}
         onClick={(event) => {
           if (event.target === event.currentTarget) dialog.current?.close();
         }}
       >
         <div className="capture-dialog-toolbar">
-          <span>{capture.caption}</span>
+          <span>
+            {t(capture.caption)}
+          </span>
           <button
             type="button"
             className="icon-button"
             onClick={() => dialog.current?.close()}
-            aria-label="Close screenshot"
+            aria-label={t("Close screenshot")}
           >
             <X size={21} />
           </button>
@@ -86,7 +93,7 @@ export function ProjectCapture({
         <div className="capture-dialog-image">
           <img
             src={capture.src}
-            alt={capture.alt}
+            alt={t(capture.alt)}
             width={capture.width}
             height={capture.height}
             loading="lazy"

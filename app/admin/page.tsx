@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { requireChatGPTUser } from "../chatgpt-auth";
 import { Header } from "../../components/site-shell";
 import { AdminDashboard } from "../../components/admin-dashboard";
 import { listProjects } from "../../lib/projects";
-import { isPortfolioAdmin } from "../../lib/admin-auth";
+import { getAdminUser, isPortfolioAdmin } from "../../lib/admin-auth";
 import { notFound } from "next/navigation";
+import { getTranslation } from "../../lib/i18n-server";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = {
-  title: "Project admin",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslation();
+  return {
+    title: t("Project admin"),
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function AdminPage() {
-  if (!isPortfolioAdmin(await requireChatGPTUser("/admin"))) notFound();
+  if (!isPortfolioAdmin(await getAdminUser())) notFound();
   return (
     <>
       <Header admin />

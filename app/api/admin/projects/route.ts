@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getChatGPTUser } from "../../../chatgpt-auth";
 import { mutationSchema } from "../../../../lib/project-model";
 import {
   deleteProject,
@@ -7,12 +6,12 @@ import {
   saveProject,
 } from "../../../../lib/projects";
 import { z } from "zod";
-import { isPortfolioAdmin } from "../../../../lib/admin-auth";
+import { getAdminUser, isPortfolioAdmin } from "../../../../lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 async function authorize(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getAdminUser();
   if (!user)
     return NextResponse.json(
       { error: "Sign in to manage projects." },

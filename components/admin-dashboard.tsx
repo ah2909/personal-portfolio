@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "./language-provider";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
@@ -55,6 +57,7 @@ export function AdminDashboard({
 }: {
   initialProjects: ProjectRecord[];
 }) {
+  const t = useTranslation();
   const [projects, setProjects] = useState(initialProjects);
   const [editing, setEditing] = useState<ProjectRecord | null>(null);
   const [isNew, setIsNew] = useState(false);
@@ -86,12 +89,12 @@ export function AdminDashboard({
     const draft = project
       ? structuredClone(project)
       : {
-          ...blankProject(),
-          order: Math.min(
-            999,
-            Math.max(0, ...projects.map((item) => item.order)) + 1,
-          ),
-        };
+        ...blankProject(),
+        order: Math.min(
+          999,
+          Math.max(0, ...projects.map((item) => item.order)) + 1,
+        ),
+      };
     setEditing(draft);
     setIsNew(!project);
     setDirty(false);
@@ -243,12 +246,12 @@ export function AdminDashboard({
           expectedVersion: remove.version,
         }),
       });
-      const data = (await response.json()) as { error?: string };
+      const data = (await response.json()) as { error?: string; };
       if (!response.ok) throw new Error(data.error);
       setProjects((current) =>
         current.filter((project) => project.slug !== remove.slug),
       );
-      setMessage(`${remove.title} removed from your portfolio.`);
+      setMessage("Removed from your portfolio.");
       setRemove(null);
     } catch (failure) {
       setError(
@@ -275,19 +278,19 @@ export function AdminDashboard({
       <div className="admin-heading">
         <div>
           <span className="eyebrow">
-            <span className="status-dot" /> YOUR CREATIVE WORKSPACE
+            <span className="status-dot" /> {t("YOUR CREATIVE WORKSPACE")}
           </span>
           <h1>
             {editing
               ? isNew
-                ? "Something new."
-                : "Make it yours."
-              : "The project desk."}
+                ? t("Something new.")
+                : t("Make it yours.")
+              : t("The project desk.")}
           </h1>
           <p>
             {editing
-              ? "Tell the story, add the details, and make it part of your portfolio."
-              : "A growing collection. A place for whatever you build next."}
+              ? t("Tell the story, add the details, and make it part of your portfolio.")
+              : t("A growing collection. A place for whatever you build next.")}
           </p>
         </div>
         {!editing && (
@@ -296,7 +299,7 @@ export function AdminDashboard({
             className="button button-dark"
             onClick={() => edit()}
           >
-            <Plus size={18} aria-hidden /> Add project
+            <Plus size={18} aria-hidden /> {t("Add project")}
           </button>
         )}
       </div>
@@ -307,21 +310,25 @@ export function AdminDashboard({
           tabIndex={-1}
           ref={errorRef}
         >
-          <strong>Something needs attention.</strong>
-          <p>{error}</p>
+          <strong>
+            {t("Something needs attention.")}
+          </strong>
+          <p>
+            {t(error)}
+          </p>
         </div>
       )}
       {message && (
         <div className="admin-alert is-success" role="status">
           <Check size={18} aria-hidden />
-          {message}
+          {t(message)}
         </div>
       )}
       {editing ? (
         <>
           <div className="editor-toolbar">
             <button type="button" className="text-link" onClick={closeEditor}>
-              <ArrowLeft size={16} aria-hidden /> All projects
+              <ArrowLeft size={16} aria-hidden /> {t("All projects")}
             </button>
             <div className="editor-tabs">
               <button
@@ -330,7 +337,7 @@ export function AdminDashboard({
                 className={!preview ? "active" : ""}
                 onClick={() => setPreview(false)}
               >
-                <Pencil size={15} aria-hidden /> Edit story
+                <Pencil size={15} aria-hidden /> {t("Edit story")}
               </button>
               <button
                 type="button"
@@ -338,29 +345,33 @@ export function AdminDashboard({
                 className={preview ? "active" : ""}
                 onClick={() => setPreview(true)}
               >
-                <Eye size={15} aria-hidden /> Preview
+                <Eye size={15} aria-hidden /> {t("Preview")}
               </button>
             </div>
             <span className="save-state">
               {dirty
-                ? "Unsaved changes"
+                ? t("Unsaved changes")
                 : isNew
-                  ? "New project"
-                  : "All changes saved"}
+                  ? t("New project")
+                  : t("All changes saved")}
             </span>
           </div>
           {discard && (
             <div className="admin-alert discard-alert" role="alert">
               <div>
-                <strong>Leave without saving?</strong>
-                <p>Your changes will be discarded.</p>
+                <strong>
+                  {t("Leave without saving?")}
+                </strong>
+                <p>
+                  {t("Your changes will be discarded.")}
+                </p>
               </div>
               <button
                 type="button"
                 className="button button-outline"
                 onClick={() => setDiscard(false)}
               >
-                Keep editing
+                {t("Keep editing")}
               </button>
               <button
                 type="button"
@@ -372,26 +383,31 @@ export function AdminDashboard({
                   setError("");
                 }}
               >
-                Discard changes
+                {t("Discard changes")}
               </button>
             </div>
           )}
           {preview ? (
             <div className="admin-preview">
-              <span className="eyebrow">PRIVATE DRAFT PREVIEW</span>
-              <h2>{editing.title || "Your next project"}</h2>
+              <span className="eyebrow">
+                {t("PRIVATE DRAFT PREVIEW")}
+              </span>
+              <h2>{editing.title || "Your next project"}
+              </h2>
               <p>
                 {editing.tagline || "Your project's one-line introduction."}
               </p>
               <ProductVisual project={editing} />
-              <p className="preview-description">{editing.description}</p>
+              <p className="preview-description">
+                {t(editing.description)}
+              </p>
               <FeatureExplorer project={editing} />
               <button
                 type="button"
                 className="button button-dark"
                 onClick={() => setPreview(false)}
               >
-                <Pencil size={16} aria-hidden /> Back to editing
+                <Pencil size={16} aria-hidden /> {t("Back to editing")}
               </button>
             </div>
           ) : (
@@ -401,12 +417,16 @@ export function AdminDashboard({
                   <div className="editor-section-heading">
                     <span>01</span>
                     <div>
-                      <h2>The introduction</h2>
-                      <p>What is it, and why should someone explore it?</p>
+                      <h2>
+                        {t("The introduction")}
+                      </h2>
+                      <p>
+                        {t("What is it, and why should someone explore it?")}
+                      </p>
                     </div>
                   </div>
                   <div className="form-two">
-                    <Field label="Project name" required>
+                    <Field label={t("Project name")} required>
                       <input
                         value={editing.title}
                         maxLength={100}
@@ -426,11 +446,11 @@ export function AdminDashboard({
                       />
                     </Field>
                     <Field
-                      label="URL slug"
+                      label={t("URL slug")}
                       hint={
                         isNew
-                          ? "Lowercase words separated by hyphens."
-                          : "The URL stays fixed so existing links keep working."
+                          ? t("Lowercase words separated by hyphens.")
+                          : t("The URL stays fixed so existing links keep working.")
                       }
                       required
                     >
@@ -442,17 +462,17 @@ export function AdminDashboard({
                       />
                     </Field>
                   </div>
-                  <Field label="One-line introduction" required>
+                  <Field label={t("One-line introduction")} required>
                     <input
                       value={editing.tagline}
                       maxLength={200}
-                      placeholder="The idea, in one sentence."
+                      placeholder={t("The idea, in one sentence.")}
                       onChange={(event) =>
                         update("tagline", event.target.value)
                       }
                     />
                   </Field>
-                  <Field label="Project overview" required>
+                  <Field label={t("Project overview")} required>
                     <textarea
                       rows={3}
                       value={editing.description}
@@ -463,17 +483,17 @@ export function AdminDashboard({
                     />
                   </Field>
                   <div className="form-two">
-                    <Field label="Category" required>
+                    <Field label={t("Category")} required>
                       <input
                         value={editing.category}
                         maxLength={80}
-                        placeholder="FINTECH / FULL STACK"
+                        placeholder={t("FINTECH / FULL STACK")}
                         onChange={(event) =>
                           update("category", event.target.value)
                         }
                       />
                     </Field>
-                    <Field label="Year" required>
+                    <Field label={t("Year")} required>
                       <input
                         value={editing.year}
                         inputMode="numeric"
@@ -487,13 +507,15 @@ export function AdminDashboard({
                   <div className="editor-section-heading">
                     <span>02</span>
                     <div>
-                      <h2>The story behind it</h2>
+                      <h2>
+                        {t("The story behind it")}
+                      </h2>
                       <p>
-                        The problem, your approach, and the technical thinking.
+                        {t("The problem, your approach, and the technical thinking.")}
                       </p>
                     </div>
                   </div>
-                  <Field label="The challenge" required>
+                  <Field label={t("The challenge")} required>
                     <textarea
                       rows={3}
                       maxLength={2000}
@@ -503,7 +525,7 @@ export function AdminDashboard({
                       }
                     />
                   </Field>
-                  <Field label="Your approach" required>
+                  <Field label={t("Your approach")} required>
                     <textarea
                       rows={3}
                       maxLength={2000}
@@ -513,7 +535,7 @@ export function AdminDashboard({
                       }
                     />
                   </Field>
-                  <Field label="Architecture & implementation" required>
+                  <Field label={t("Architecture & implementation")} required>
                     <textarea
                       rows={4}
                       maxLength={2000}
@@ -524,8 +546,8 @@ export function AdminDashboard({
                     />
                   </Field>
                   <Field
-                    label="Technology stack"
-                    hint="Separate technologies with commas."
+                    label={t("Technology stack")}
+                    hint={t("Separate technologies with commas.")}
                     required
                   >
                     <input
@@ -544,8 +566,8 @@ export function AdminDashboard({
                     />
                   </Field>
                   <Field
-                    label="Build highlights"
-                    hint="One highlight per line. Up to 8."
+                    label={t("Build highlights")}
+                    hint={t("One highlight per line. Up to 8.")}
                   >
                     <textarea
                       rows={4}
@@ -567,21 +589,25 @@ export function AdminDashboard({
                   <div className="editor-section-heading">
                     <span>03</span>
                     <div>
-                      <h2>What makes it work</h2>
-                      <p>Add up to 12 features for the interactive explorer.</p>
+                      <h2>
+                        {t("What makes it work")}
+                      </h2>
+                      <p>
+                        {t("Add up to 12 features for the interactive explorer.")}
+                      </p>
                     </div>
                   </div>
                   {editing.features.map((feature, index) => (
                     <div className="feature-editor" key={index}>
                       <div className="feature-editor-top">
                         <span className="eyebrow">
-                          FEATURE {String(index + 1).padStart(2, "0")}
+                          {t("FEATURE")} {String(index + 1).padStart(2, "0")}
                         </span>
                         <button
                           type="button"
                           className="icon-button"
                           disabled={editing.features.length === 1}
-                          aria-label={`Remove feature ${index + 1}`}
+                          aria-label={`${t("Remove feature")} ${index + 1}`}
                           onClick={() =>
                             update(
                               "features",
@@ -594,7 +620,7 @@ export function AdminDashboard({
                           <X size={17} />
                         </button>
                       </div>
-                      <Field label="Feature title" required>
+                      <Field label={t("Feature title")} required>
                         <input
                           value={feature.title}
                           maxLength={80}
@@ -603,7 +629,7 @@ export function AdminDashboard({
                           }
                         />
                       </Field>
-                      <Field label="Feature description" required>
+                      <Field label={t("Feature description")} required>
                         <textarea
                           rows={3}
                           maxLength={1200}
@@ -615,7 +641,7 @@ export function AdminDashboard({
                           }
                         />
                       </Field>
-                      <Field label="Preview style">
+                      <Field label={t("Preview style")}>
                         <select
                           value={feature.visual}
                           onChange={(event) =>
@@ -624,14 +650,26 @@ export function AdminDashboard({
                             })
                           }
                         >
-                          <option value="generic">Project identity</option>
-                          <option value="overview">Portfolio dashboard</option>
-                          <option value="analysis">Portfolio analysis</option>
-                          <option value="alerts">Market alerts</option>
-                          <option value="storefront">Shop storefront</option>
-                          <option value="checkout">Shop checkout</option>
+                          <option value="generic">
+                            {t("Project identity")}
+                          </option>
+                          <option value="overview">
+                            {t("Portfolio dashboard")}
+                          </option>
+                          <option value="analysis">
+                            {t("Portfolio analysis")}
+                          </option>
+                          <option value="alerts">
+                            {t("Market alerts")}
+                          </option>
+                          <option value="storefront">
+                            {t("Shop storefront")}
+                          </option>
+                          <option value="checkout">
+                            {t("Shop checkout")}
+                          </option>
                           <option value="operations">
-                            Store administration
+                            {t("Store administration")}
                           </option>
                         </select>
                       </Field>
@@ -648,18 +686,22 @@ export function AdminDashboard({
                       ])
                     }
                   >
-                    <Plus size={16} aria-hidden /> Add feature
+                    <Plus size={16} aria-hidden /> {t("Add feature")}
                   </button>
                 </section>
                 <section className="editor-section">
                   <div className="editor-section-heading">
                     <span>04</span>
                     <div>
-                      <h2>A little more context</h2>
-                      <p>Optional links, imagery, and honest limitations.</p>
+                      <h2>
+                        {t("A little more context")}
+                      </h2>
+                      <p>
+                        {t("Optional links, imagery, and honest limitations.")}
+                      </p>
                     </div>
                   </div>
-                  <Field label="Live project URL">
+                  <Field label={t("Live project URL")}>
                     <input
                       type="url"
                       value={editing.liveUrl}
@@ -669,7 +711,7 @@ export function AdminDashboard({
                       }
                     />
                   </Field>
-                  <Field label="Source code URL">
+                  <Field label={t("Source code URL")}>
                     <input
                       type="url"
                       value={editing.sourceUrl}
@@ -680,8 +722,8 @@ export function AdminDashboard({
                     />
                   </Field>
                   <Field
-                    label="Cover image URL"
-                    hint="Use a public HTTPS image. Leave empty for the built-in preview."
+                    label={t("Cover image URL")}
+                    hint={t("Use a public HTTPS image. Leave empty for the built-in preview.")}
                   >
                     <input
                       type="url"
@@ -693,8 +735,8 @@ export function AdminDashboard({
                     />
                   </Field>
                   <Field
-                    label="Presentation note"
-                    hint="Mention limitations, sample data, or features awaiting verification."
+                    label={t("Presentation note")}
+                    hint={t("Mention limitations, sample data, or features awaiting verification.")}
                   >
                     <textarea
                       rows={3}
@@ -707,8 +749,12 @@ export function AdminDashboard({
               </div>
               <aside className="editor-sidebar">
                 <div className="publish-panel">
-                  <span className="eyebrow">MAKE IT PART OF YOUR STORY</span>
-                  <h2>Ready when you are.</h2>
+                  <span className="eyebrow">
+                    {t("MAKE IT PART OF YOUR STORY")}
+                  </span>
+                  <h2>
+                    {t("Ready when you are.")}
+                  </h2>
                   <label className="checkbox-field">
                     <input
                       type="checkbox"
@@ -718,10 +764,11 @@ export function AdminDashboard({
                       }
                     />
                     <span>
-                      <strong>Publish project</strong>
+                      <strong>
+                        {t("Publish project")}
+                      </strong>
                       <small>
-                        Show it on the portfolio and enable its introduction
-                        page.
+                        {t("Show it on the portfolio and enable its introduction page.")}
                       </small>
                     </span>
                   </label>
@@ -734,13 +781,17 @@ export function AdminDashboard({
                       }
                     />
                     <span>
-                      <strong>Mark as selected</strong>
-                      <small>Add a selected-project badge.</small>
+                      <strong>
+                        {t("Mark as selected")}
+                      </strong>
+                      <small>
+                        {t("Add a selected-project badge.")}
+                      </small>
                     </span>
                   </label>
                   <Field
-                    label="Display order"
-                    hint="Lower numbers appear first."
+                    label={t("Display order")}
+                    hint={t("Lower numbers appear first.")}
                   >
                     <input
                       type="number"
@@ -752,7 +803,7 @@ export function AdminDashboard({
                       }
                     />
                   </Field>
-                  <Field label="Project palette">
+                  <Field label={t("Project palette")}>
                     <select
                       value={editing.accent}
                       onChange={(event) =>
@@ -762,10 +813,18 @@ export function AdminDashboard({
                         )
                       }
                     >
-                      <option value="mint">Sage & mint</option>
-                      <option value="orange">Clay & orange</option>
-                      <option value="lavender">Soft lavender</option>
-                      <option value="blue">Powder blue</option>
+                      <option value="mint">
+                        {t("Sage & mint")}
+                      </option>
+                      <option value="orange">
+                        {t("Clay & orange")}
+                      </option>
+                      <option value="lavender">
+                        {t("Soft lavender")}
+                      </option>
+                      <option value="blue">
+                        {t("Powder blue")}
+                      </option>
                     </select>
                   </Field>
                   <div className={`palette-preview accent-${editing.accent}`}>
@@ -784,14 +843,13 @@ export function AdminDashboard({
                       <Save size={17} aria-hidden />
                     )}
                     {saving
-                      ? "Saving…"
+                      ? t("Saving…")
                       : editing.published
-                        ? "Save & publish"
-                        : "Save draft"}
+                        ? t("Save & publish")
+                        : t("Save draft")}
                   </button>
                   <p className="publish-note">
-                    Saved to your portfolio database. No code changes or rebuild
-                    needed.
+                    {t("Saved to your portfolio database. No code changes or rebuild needed.")}
                   </p>
                   {!isNew && editing.published && (
                     <Link
@@ -799,7 +857,7 @@ export function AdminDashboard({
                       href={`/projects/${editing.slug}`}
                       target="_blank"
                     >
-                      Open project page <ArrowUpRight size={15} aria-hidden />
+                      {t("Open project page")} <ArrowUpRight size={15} aria-hidden />
                     </Link>
                   )}
                 </div>
@@ -816,8 +874,11 @@ export function AdminDashboard({
               aria-pressed={filter === "all"}
             >
               <LayoutGrid size={19} aria-hidden />
-              <span>All projects</span>
-              <strong>{String(projects.length).padStart(2, "0")}</strong>
+              <span>
+                {t("All projects")}
+              </span>
+              <strong>{String(projects.length).padStart(2, "0")}
+              </strong>
             </button>
             <button
               type="button"
@@ -825,7 +886,9 @@ export function AdminDashboard({
               aria-pressed={filter === "published"}
             >
               <Eye size={19} aria-hidden />
-              <span>Published</span>
+              <span>
+                {t("Published")}
+              </span>
               <strong>
                 {String(
                   projects.filter((project) => project.published).length,
@@ -838,7 +901,9 @@ export function AdminDashboard({
               aria-pressed={filter === "draft"}
             >
               <FileText size={19} aria-hidden />
-              <span>In the works</span>
+              <span>
+                {t("In the works")}
+              </span>
               <strong>
                 {String(
                   projects.filter((project) => !project.published).length,
@@ -848,7 +913,8 @@ export function AdminDashboard({
           </div>
           <div className="admin-collection-heading">
             <h2>
-              Your collection <span>{visible.length}</span>
+              {t("Your collection")} <span>{visible.length}
+              </span>
             </h2>
             <div>
               <label className="project-search">
@@ -856,8 +922,8 @@ export function AdminDashboard({
                 <input
                   type="search"
                   value={search}
-                  placeholder="Find a project"
-                  aria-label="Find a project"
+                  placeholder={t("Find a project")}
+                  aria-label={t("Find a project")}
                   onChange={(event) => setSearch(event.target.value)}
                 />
               </label>
@@ -867,17 +933,17 @@ export function AdminDashboard({
                 disabled={saving}
                 onClick={reload}
               >
-                Refresh
+                {t("Refresh")}
               </button>
             </div>
           </div>
           {remove && (
             <div className="admin-alert discard-alert" role="alert">
               <div>
-                <strong>Remove {remove.title}?</strong>
+                <strong>
+                  {t("Remove")} {remove.title}?</strong>
                 <p>
-                  Its introduction page will become unavailable. Unpublish it
-                  instead if you want to keep a draft.
+                  {t("Its introduction page will become unavailable. Unpublish it instead if you want to keep a draft.")}
                 </p>
               </div>
               <button
@@ -886,7 +952,7 @@ export function AdminDashboard({
                 onClick={() => setRemove(null)}
                 disabled={saving}
               >
-                Keep project
+                {t("Keep project")}
               </button>
               <button
                 type="button"
@@ -894,7 +960,7 @@ export function AdminDashboard({
                 onClick={deleteSelected}
                 disabled={saving}
               >
-                {saving ? "Removing…" : "Remove project"}
+                {saving ? t("Removing…") : t("Remove project")}
               </button>
             </div>
           )}
@@ -907,16 +973,18 @@ export function AdminDashboard({
                   {project.title.charAt(0)}
                 </div>
                 <div className="admin-project-title">
-                  <h3>{project.title}</h3>
+                  <h3>
+                    {t(project.title)}
+                  </h3>
                   <span>
-                    /{project.slug} · {project.category}
+                    /{project.slug} · {t(project.category)}
                   </span>
                 </div>
                 <span
                   className={`publication-status ${project.published ? "published" : "draft"}`}
                 >
                   <i />
-                  {project.published ? "Published" : "Draft"}
+                  {project.published ? t("Published") : t("Draft")}
                 </span>
                 <span className="admin-order">
                   #{String(project.order).padStart(2, "0")}
@@ -927,7 +995,7 @@ export function AdminDashboard({
                       href={`/projects/${project.slug}`}
                       target="_blank"
                       className="icon-button"
-                      aria-label={`View ${project.title}`}
+                      aria-label={`${t("View")} ${project.title}`}
                     >
                       <ArrowUpRight size={18} />
                     </Link>
@@ -935,7 +1003,7 @@ export function AdminDashboard({
                   <button
                     type="button"
                     className="icon-button"
-                    aria-label={`Edit ${project.title}`}
+                    aria-label={`${t("Edit")} ${project.title}`}
                     onClick={() => edit(project)}
                   >
                     <Pencil size={17} />
@@ -943,7 +1011,7 @@ export function AdminDashboard({
                   <button
                     type="button"
                     className="icon-button danger-icon"
-                    aria-label={`Remove ${project.title}`}
+                    aria-label={`${t("Remove")} ${project.title}`}
                     onClick={() => {
                       setRemove(project);
                       setMessage("");
@@ -959,13 +1027,13 @@ export function AdminDashboard({
             <div className="empty-state">
               <h3>
                 {projects.length
-                  ? "Nothing in this view."
-                  : "Your next idea starts here."}
+                  ? t("Nothing in this view.")
+                  : t("Your next idea starts here.")}
               </h3>
               <p>
                 {projects.length
-                  ? "Try another search or project status."
-                  : "Add a project and tell the story behind it."}
+                  ? t("Try another search or project status.")
+                  : t("Add a project and tell the story behind it.")}
               </p>
               <button
                 type="button"
@@ -975,30 +1043,33 @@ export function AdminDashboard({
                 }
               >
                 {projects.length
-                  ? "Show all projects"
-                  : "Add your first project"}
+                  ? t("Show all projects")
+                  : t("Add your first project")}
               </button>
             </div>
           )}
           <div className="admin-tip">
             <Plus size={20} aria-hidden />
             <div>
-              <strong>Built something new?</strong>
+              <strong>
+                {t("Built something new?")}
+              </strong>
               <p>
-                Add a story, choose a palette, and give it a place in the
-                collection.
+                {t("Add a story, choose a palette, and give it a place in the collection.")}
               </p>
             </div>
             <button type="button" className="text-link" onClick={() => edit()}>
-              Add a project <ArrowUpRight size={16} aria-hidden />
+              {t("Add a project")} <ArrowUpRight size={16} aria-hidden />
             </button>
           </div>
         </>
       )}
       <div className="admin-footnote">
-        <span>PERSONAL PROJECT LAB / ADMIN</span>
+        <span>
+          {t("PERSONAL PROJECT LAB / ADMIN")}
+        </span>
         <Link href="/">
-          Back to the portfolio <ArrowUpRight size={14} aria-hidden />
+          {t("Back to the portfolio")} <ArrowUpRight size={14} aria-hidden />
         </Link>
       </div>
     </>
@@ -1023,7 +1094,8 @@ function Field({
         {required && <span className="required-mark"> *</span>}
       </span>
       {children}
-      {hint && <small>{hint}</small>}
+      {hint && <small>{hint}
+      </small>}
     </label>
   );
 }

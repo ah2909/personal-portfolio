@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslation } from "./language-provider";
 import {
   ArrowUpRight,
   Bell,
@@ -14,12 +17,13 @@ import {
 import type { Feature, Project } from "../lib/project-model";
 
 function Chart() {
+  const t = useTranslation();
   return (
     <svg
       className="mock-chart"
       viewBox="0 0 500 140"
       role="img"
-      aria-label="Illustrative portfolio performance chart"
+      aria-label={t("Illustrative portfolio performance chart")}
     >
       <defs>
         <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
@@ -45,7 +49,8 @@ function Chart() {
   );
 }
 
-function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
+function CryptoVisual({ visual }: { visual: Feature["visual"]; }) {
+  const t = useTranslation();
   return (
     <div className="product-window crypto-window">
       <div className="window-toolbar">
@@ -54,8 +59,12 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
           <i />
           <i />
         </div>
-        <span>cryptofolio / workspace</span>
-        <span className="tiny-pill">DEMO</span>
+        <span>
+          {t("cryptofolio / workspace")}
+        </span>
+        <span className="tiny-pill">
+          {t("DEMO")}
+        </span>
       </div>
       <div className="crypto-content">
         <div className="mock-nav">
@@ -63,7 +72,7 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
             <span className="crypto-logo">c</span> Cryptofolio
           </strong>
           <span>
-            <LayoutGrid size={14} /> Overview
+            <LayoutGrid size={14} /> {t("Overview")}
           </span>
           <Wallet size={16} />
           <Bell size={16} />
@@ -72,8 +81,12 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
           <>
             <div className="mock-heading">
               <div>
-                <small>UNDERSTAND YOUR EXPOSURE</small>
-                <h3>Portfolio insights</h3>
+                <small>
+                  {t("UNDERSTAND YOUR EXPOSURE")}
+                </small>
+                <h3>
+                  {t("Portfolio insights")}
+                </h3>
               </div>
               <Sparkles size={22} />
             </div>
@@ -82,36 +95,52 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
                 62<small>/ 100</small>
               </div>
               <div>
-                <span className="tiny-pill">ILLUSTRATIVE ASSESSMENT</span>
-                <h4>A closer look at your allocation.</h4>
+                <span className="tiny-pill">
+                  {t("ILLUSTRATIVE ASSESSMENT")}
+                </span>
+                <h4>
+                  {t("A closer look at your allocation.")}
+                </h4>
                 <p>
-                  A structured view of concentration,
+                  {t("A structured view of concentration,")}
                   <br />
-                  exposure, and asset performance.
+                  {t("exposure, and asset performance.")}
                 </p>
               </div>
             </div>
             <div className="insight-row">
-              <span>Concentration</span>
+              <span>
+                {t("Concentration")}
+              </span>
               <div>
                 <i style={{ width: "68%" }} />
               </div>
-              <span>High</span>
+              <span>
+                {t("High")}
+              </span>
             </div>
             <div className="insight-row">
-              <span>Diversification</span>
+              <span>
+                {t("Diversification")}
+              </span>
               <div>
                 <i style={{ width: "44%" }} />
               </div>
-              <span>Moderate</span>
+              <span>
+                {t("Moderate")}
+              </span>
             </div>
           </>
         ) : visual === "alerts" ? (
           <>
             <div className="mock-heading">
               <div>
-                <small>STAY IN THE LOOP</small>
-                <h3>Your market, on watch.</h3>
+                <small>
+                  {t("STAY IN THE LOOP")}
+                </small>
+                <h3>
+                  {t("Your market, on watch.")}
+                </h3>
               </div>
               <Bell size={22} />
             </div>
@@ -120,44 +149,66 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
                 <Bell size={24} />
               </div>
               <div>
-                <strong>BTC price alert</strong>
-                <p>Notify when Bitcoin crosses $70,000</p>
+                <strong>
+                  {t("BTC price alert")}
+                </strong>
+                <p>
+                  {t("Notify when Bitcoin crosses $70,000")}
+                </p>
               </div>
-              <span className="tiny-pill">Watching</span>
+              <span className="tiny-pill">
+                {t("Watching")}
+              </span>
             </div>
             <div className="telegram-demo">
               <Check size={18} />
               <div>
-                <strong>Telegram connected</strong>
-                <p>Market notifications, delivered to your chat.</p>
+                <strong>
+                  {t("Telegram connected")}
+                </strong>
+                <p>
+                  {t("Market notifications, delivered to your chat.")}
+                </p>
               </div>
             </div>
             <div className="mock-disclaimer">
-              An illustrative alert. No live monitoring is running here.
+              {t("An illustrative alert. No live monitoring is running here.")}
             </div>
           </>
         ) : (
           <>
             <div className="mock-heading">
               <div>
-                <small>TOTAL PORTFOLIO VALUE</small>
+                <small>
+                  {t("TOTAL PORTFOLIO VALUE")}
+                </small>
                 <h3>
                   $48,256<span>.90</span>
                 </h3>
                 <p className="gain">
-                  ↗ +$2,184.32 <span>this month</span>
+                  ↗ +$2,184.32 <span>
+                    {t("this month")}
+                  </span>
                 </p>
               </div>
               <span className="mock-period">
-                This month <ChevronDown size={12} />
+                {t("This month")} <ChevronDown size={12} />
               </span>
             </div>
             <Chart />
             <div className="mock-axis">
-              <span>01 NOV</span>
-              <span>07 NOV</span>
-              <span>14 NOV</span>
-              <span>21 NOV</span>
+              <span>
+                {t("01 NOV")}
+              </span>
+              <span>
+                {t("07 NOV")}
+              </span>
+              <span>
+                {t("14 NOV")}
+              </span>
+              <span>
+                {t("21 NOV")}
+              </span>
             </div>
             <div className="asset-list">
               {[
@@ -166,12 +217,16 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
                 ["S", "Solana", "SOL", "$8,203.67", "17%"],
               ].map((asset, i) => (
                 <div key={asset[1]}>
-                  <b className={`coin coin-${i}`}>{asset[0]}</b>
+                  <b className={`coin coin-${i}`}>{asset[0]}
+                  </b>
                   <strong>
-                    {asset[1]} <small>{asset[2]}</small>
+                    {asset[1]} <small>{asset[2]}
+                    </small>
                   </strong>
-                  <span>{asset[3]}</span>
-                  <span className="asset-percent">{asset[4]}</span>
+                  <span>{asset[3]}
+                  </span>
+                  <span className="asset-percent">{asset[4]}
+                  </span>
                 </div>
               ))}
             </div>
@@ -182,7 +237,8 @@ function CryptoVisual({ visual }: { visual: Feature["visual"] }) {
   );
 }
 
-function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
+function CommerceVisual({ visual }: { visual: Feature["visual"]; }) {
+  const t = useTranslation();
   return (
     <div className="product-window commerce-window">
       <div className="window-toolbar">
@@ -192,46 +248,60 @@ function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
           <i />
         </div>
         <span>
-          commerce / {visual === "operations" ? "store admin" : "storefront"}
+          {t("commerce /")} {visual === "operations" ? t("store admin") : t("storefront")}
         </span>
-        <span className="tiny-pill">DEMO</span>
+        <span className="tiny-pill">
+          {t("DEMO")}
+        </span>
       </div>
       <div className="commerce-content">
         <div className="shop-nav">
           <strong>
             mộc<span>®</span>
           </strong>
-          <span>Everyday, thoughtfully.</span>
+          <span>
+            {t("Everyday, thoughtfully.")}
+          </span>
           <ShoppingBag size={16} />
         </div>
         {visual === "checkout" ? (
           <div className="checkout-demo">
             <div>
-              <small>01 / YOUR DETAILS</small>
-              <h3>Almost yours.</h3>
+              <small>
+                {t("01 / YOUR DETAILS")}
+              </small>
+              <h3>
+                {t("Almost yours.")}
+              </h3>
               <div className="fake-input">
-                Full name <span>Nguyễn An</span>
+                {t("Full name")} <span>Nguyễn An</span>
               </div>
               <div className="fake-input">
-                Delivery address <span>Ho Chi Minh City</span>
+                {t("Delivery address")} <span>
+                  {t("Ho Chi Minh City")}
+                </span>
               </div>
               <div className="fake-input">
-                Payment <span>VietQR bank transfer</span>
+                {t("Payment")} <span>
+                  {t("VietQR bank transfer")}
+                </span>
               </div>
             </div>
             <div className="order-summary">
               <div className="vase vase-small" />
-              <strong>Everyday vase</strong>
+              <strong>
+                {t("Everyday vase")}
+              </strong>
               <span>490.000 ₫</span>
               <hr />
               <span>
-                Shipping <b>30.000 ₫</b>
+                {t("Shipping")} <b>30.000 ₫</b>
               </span>
               <strong>
-                Total <b>520.000 ₫</b>
+                {t("Total")} <b>520.000 ₫</b>
               </strong>
               <span className="fake-button">
-                Order summary <Check size={14} />
+                {t("Order summary")} <Check size={14} />
               </span>
             </div>
           </div>
@@ -239,29 +309,45 @@ function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
           <>
             <div className="mock-heading">
               <div>
-                <small>YOUR STORE AT A GLANCE</small>
-                <h3>Room to grow.</h3>
+                <small>
+                  {t("YOUR STORE AT A GLANCE")}
+                </small>
+                <h3>
+                  {t("Room to grow.")}
+                </h3>
               </div>
               <Package size={24} />
             </div>
             <div className="ops-stats">
               <div>
-                <small>PRODUCTS</small>
+                <small>
+                  {t("PRODUCTS")}
+                </small>
                 <strong>24</strong>
               </div>
               <div>
-                <small>OPEN ORDERS</small>
+                <small>
+                  {t("OPEN ORDERS")}
+                </small>
                 <strong>08</strong>
               </div>
               <div>
-                <small>STOCK ALERTS</small>
+                <small>
+                  {t("STOCK ALERTS")}
+                </small>
                 <strong>03</strong>
               </div>
             </div>
             <div className="ops-row">
-              <span>ORDER</span>
-              <span>ITEMS</span>
-              <span>STATUS</span>
+              <span>
+                {t("ORDER")}
+              </span>
+              <span>
+                {t("ITEMS")}
+              </span>
+              <span>
+                {t("STATUS")}
+              </span>
             </div>
             {[
               ["#ORD-108", "2 items", "Reserved"],
@@ -269,9 +355,14 @@ function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
               ["#ORD-106", "3 items", "Fulfilled"],
             ].map((row) => (
               <div className="ops-row" key={row[0]}>
-                <strong>{row[0]}</strong>
-                <span>{row[1]}</span>
-                <span className="tiny-pill">{row[2]}</span>
+                <strong>{row[0]}
+                </strong>
+                <span>
+                  {t(row[1])}
+                </span>
+                <span className="tiny-pill">
+                  {t(row[2])}
+                </span>
               </div>
             ))}
           </>
@@ -279,14 +370,19 @@ function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
           <>
             <div className="shop-hero">
               <div>
-                <span className="shop-kicker">OBJECTS FOR SLOW LIVING</span>
+                <span className="shop-kicker">
+                  {t("OBJECTS FOR SLOW LIVING")}
+                </span>
                 <h3>
-                  A little less.
-                  <br />A little better.
+                  {t("A little less.")}
+                  <br />
+                  {t("A little better.")}
                 </h3>
-                <p>Thoughtful pieces for your everyday.</p>
+                <p>
+                  {t("Thoughtful pieces for your everyday.")}
+                </p>
                 <span className="shop-discover">
-                  Discover the collection <ArrowUpRight size={14} />
+                  {t("Discover the collection")} <ArrowUpRight size={14} />
                 </span>
               </div>
               <div className="still-life">
@@ -297,8 +393,12 @@ function CommerceVisual({ visual }: { visual: Feature["visual"] }) {
               </div>
             </div>
             <div className="shop-bottom">
-              <span>Made for the everyday.</span>
-              <span>Considered design. Lasting character.</span>
+              <span>
+                {t("Made for the everyday.")}
+              </span>
+              <span>
+                {t("Considered design. Lasting character.")}
+              </span>
               <Search size={15} />
             </div>
           </>
@@ -317,6 +417,7 @@ export function ProductVisual({
   visual?: Feature["visual"];
   compact?: boolean;
 }) {
+  const t = useTranslation();
   const selected = visual || project.features[0]?.visual || "generic";
   return (
     <div
@@ -326,7 +427,7 @@ export function ProductVisual({
         <img
           className="project-cover"
           src={project.coverUrl}
-          alt={`${project.title} project preview`}
+          alt={`${project.title} — ${t("project preview")}`}
           loading="lazy"
           referrerPolicy="no-referrer"
         />
@@ -336,9 +437,14 @@ export function ProductVisual({
         <CommerceVisual visual={selected} />
       ) : (
         <div className="generic-preview">
-          <span className="generic-symbol">{project.title.charAt(0)}</span>
-          <h3>{project.title}</h3>
-          <p>{project.tagline}</p>
+          <span className="generic-symbol">{project.title.charAt(0)}
+          </span>
+          <h3>
+            {t(project.title)}
+          </h3>
+          <p>
+            {t(project.tagline)}
+          </p>
           <span className="eyebrow">
             {project.stack.slice(0, 3).join(" / ")}
           </span>
@@ -346,8 +452,8 @@ export function ProductVisual({
       )}
       <span className="stage-caption">
         {project.coverUrl && !visual
-          ? "PROJECT PREVIEW"
-          : "ILLUSTRATIVE PRODUCT PREVIEW"}
+          ? t("PROJECT PREVIEW")
+          : t("ILLUSTRATIVE PRODUCT PREVIEW")}
       </span>
     </div>
   );

@@ -1,3 +1,6 @@
+"use client";
+
+import { LanguageSwitcher, useTranslation } from "./language-provider";
 import { ArrowUpRight, Asterisk, ArrowUp } from "lucide-react";
 import { profile } from "../lib/profile";
 
@@ -8,52 +11,61 @@ export function Header({
   admin?: boolean;
   projectCount?: number;
 }) {
+  const t = useTranslation();
   return (
     <header className="site-header wrap">
-      <a href="/" className="wordmark" aria-label={`${profile.name} home`}>
+      <a href="/" className="wordmark" aria-label={`${profile.name} — ${t("Home page")}`}>
         h<span className="brand-dot">.</span>
         <span className="wordmark-label">
           {profile.name.toUpperCase()}
           <br />
-          PERSONAL PROJECT LAB
+          {t("PERSONAL PROJECT LAB")}
         </span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label={t("Main navigation")}>
         <a href="/#work">
-          Selected work{" "}
+          {t("Selected work")}{" "}
           {projectCount !== undefined && (
             <span className="nav-index">
               {String(projectCount).padStart(2, "0")}
             </span>
           )}
         </a>
-        <a href="/#about">About</a>
+        <a href="/#about">
+          {t("About")}
+        </a>
         <a
           className="nav-contact"
           href={admin ? "/" : `mailto:${profile.email}`}
         >
-          {admin ? "View portfolio" : "Let’s connect"}
+          {admin ? t("View portfolio") : t("Let’s connect")}
           <ArrowUpRight size={16} aria-hidden />
         </a>
+        <LanguageSwitcher />
       </nav>
     </header>
   );
 }
 
 export function Footer() {
+  const t = useTranslation();
   return (
     <footer className="site-footer wrap" id="connect">
       <div className="footer-top">
         <div>
-          <span className="eyebrow">ALWAYS BUILDING SOMETHING</span>
+          <span className="eyebrow">
+            {t("ALWAYS BUILDING SOMETHING")}
+          </span>
           <h2>
-            Good ideas deserve
+            {t("Good ideas deserve")}
             <br />
-            to become <em>real things.</em>
+            {t("to become")} <em>
+              {t("real things.")}
+            </em>
           </h2>
           <div className="footer-contact">
             <a className="text-link" href={`mailto:${profile.email}`}>
-              Let’s talk <ArrowUpRight size={16} aria-hidden />
+              {t("Let’s talk")} <ArrowUpRight size={16} aria-hidden />
             </a>
             <a
               className="text-link"
@@ -69,14 +81,14 @@ export function Footer() {
       </div>
       <div className="footer-bottom">
         <span>
-          © {new Date().getFullYear()} {profile.name} · Built with curiosity.
+          © {new Date().getFullYear()} {profile.name} {t("· Built with curiosity.")}
         </span>
         <div>
           <a href="/admin">
-            Project admin <ArrowUpRight size={14} aria-hidden />
+            {t("Project admin")} <ArrowUpRight size={14} aria-hidden />
           </a>
           <a href="#top">
-            Back to top <ArrowUp size={14} aria-hidden />
+            {t("Back to top")} <ArrowUp size={14} aria-hidden />
           </a>
         </div>
       </div>

@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "personal-portfolio",
+	"main": "worker/index.ts",
+	"compatibility_date": "2026-05-15",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "portfolio",
+			"database_id": "eab98649-ba12-41a9-a3ff-5f6028efee3c",
+			"migrations_dir": "drizzle"
+		},
+		{
+			"binding": "portfolio",
+			"database_name": "portfolio",
+			"database_id": "eab98649-ba12-41a9-a3ff-5f6028efee3c",
+			"remote": true
+		}
+	]
+}

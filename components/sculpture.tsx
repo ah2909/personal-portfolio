@@ -1,16 +1,19 @@
 "use client";
 
+import { useTranslation } from "./language-provider";
+
 import { useEffect, useRef, useState } from "react";
 import { Expand, Pause, Play, RotateCcw } from "lucide-react";
 
 export function Sculpture() {
+  const t = useTranslation();
   const host = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [paused, setPaused] = useState(false);
   const pauseRef = useRef(false);
   const [expanded, setExpanded] = useState(false);
   const expandRef = useRef(false);
-  const resetRef = useRef<() => void>(() => {});
+  const resetRef = useRef<() => void>(() => { });
 
   useEffect(() => {
     pauseRef.current = paused;
@@ -22,7 +25,7 @@ export function Sculpture() {
     const container = host.current;
     if (!container) return;
     let disposed = false;
-    let cleanup = () => {};
+    let cleanup = () => { };
     import("three")
       .then((THREE) => {
         if (disposed) return;
@@ -216,7 +219,7 @@ export function Sculpture() {
           renderer.domElement.remove();
         };
       })
-      .catch(() => {});
+      .catch(() => { });
     return () => {
       disposed = true;
       cleanup();
@@ -235,12 +238,15 @@ export function Sculpture() {
         <span />
       </div>
       <span className="scene-note scene-note-top">
-        EXPERIMENT NO. 001
+        {t("EXPERIMENT NO. 001")}
         <br />
-        <b>CONNECTED BY CURIOSITY</b>
+        <b>
+          {t("CONNECTED BY CURIOSITY")}
+        </b>
       </span>
       <div className="scene-controls">
-        <span>{ready ? "DRAG TO EXPLORE" : "CONNECTED FORMS"}</span>
+        <span>{ready ? t("DRAG TO EXPLORE") : t("CONNECTED FORMS")}
+        </span>
         {ready && (
           <>
             <button
@@ -248,22 +254,22 @@ export function Sculpture() {
               className="scene-expand"
               onClick={() => setExpanded(!expanded)}
               aria-pressed={expanded}
-              aria-label={expanded ? "Assemble sculpture" : "Explode sculpture"}
+              aria-label={expanded ? t("Assemble sculpture") : t("Explode sculpture")}
             >
               <Expand size={14} aria-hidden />
-              {expanded ? "Assemble" : "Explode"}
+              {expanded ? t("Assemble") : t("Explode")}
             </button>
             <button
               type="button"
               onClick={() => setPaused(!paused)}
-              aria-label={paused ? "Play 3D animation" : "Pause 3D animation"}
+              aria-label={paused ? t("Play 3D animation") : t("Pause 3D animation")}
             >
               {paused ? <Play size={14} /> : <Pause size={14} />}
             </button>
             <button
               type="button"
               onClick={() => resetRef.current()}
-              aria-label="Reset 3D view"
+              aria-label={t("Reset 3D view")}
             >
               <RotateCcw size={14} />
             </button>
